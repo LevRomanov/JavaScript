@@ -1,38 +1,29 @@
-function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass) {
-  let tabs = document.querySelectorAll(tabsSelector),
-    tabsContent = document.querySelectorAll(tabsContentSelector),
-    tabsParent = document.querySelector(tabsParentSelector);
+const tabs = (tabsBtnSelector,tabsItemSelector,activeClass) => {
+  const tabsBtn = document.querySelectorAll(tabsBtnSelector),
+    tabItems = document.querySelectorAll(tabsItemSelector);
 
-  function hideTabContent() {
+  function onTabClick(btns) {
+    btns.addEventListener('click', () => {
+      let currentBtn = btns;
+      let tabId = currentBtn.getAttribute('data-tab');
+      let currentTab = document.querySelector(tabId);
 
-    tabsContent.forEach(item => {
-      item.classList.add('hide');
-      item.classList.remove('show', 'fade');
+      if (!currentBtn.classList.contains(activeClass)) {
+        tabsBtn.forEach(btns => {
+          btns.classList.remove(activeClass);
+        });
+
+        tabItems.forEach(item => {
+          item.classList.remove(activeClass);
+        });
+
+        currentBtn.classList.add(activeClass);
+        currentTab.classList.add(activeClass);
+      };
     });
+  };
 
-    tabs.forEach(item => {
-      item.classList.remove('tabheader__item_active');
-    });
-  }
-
-  function showTabContent(i = 0) {
-    tabsContent[i].classList.add('show', 'fade');
-    tabsContent[i].classList.remove('hide');
-    tabs[i].classList.add(activeClass);
-  }
-
-  hideTabContent();
-  showTabContent();
-
-  tabsParent.addEventListener('click', function (event) {
-    const target = event.target;
-    if (target && target.classList.contains(tabsSelector.slice(1))) {
-      tabs.forEach((item, i) => {
-        if (target == item) {
-          hideTabContent();
-          showTabContent(i);
-        }
-      });
-    }
-  });
-}
+  tabsBtn.forEach(onTabClick);
+  document.querySelector(tabsBtnSelector).click();
+};
+export default tabs;
